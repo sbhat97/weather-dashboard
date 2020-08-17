@@ -72,13 +72,26 @@ function updateFour(weatherDatafour){
 //}
 
 //function to update list:  include this in the query? non inputs to this function
+// document.addEventListener("click",function(e){
+//   console.log(e.target)
+//   if(e.target.classList.contains("city")){
+//     console.log("found the list item")
+//   }
+// })
 
 function addCity(citySearched){
 
-  var newItem = document.createElement("li");
+var newItem = document.createElement("li");
+newItem.classList.add("city")
+
   var textnode = document.createTextNode(citySearched);
   newItem.appendChild(textnode);
   list = document.getElementById("citiesDisplayed")
+  newItem.addEventListener("click",function(e){
+    //console.log(e.target)
+    console.log(e.target.textContent)
+    getCityWeather(e.target.textContent)
+  })
 
   node = list.firstElementChild;
   howMany = list.childElementCount;
@@ -96,10 +109,9 @@ function addCity(citySearched){
     list.removeChild(list.childNodes[index])
   }
   entryCount++
-  //entryID = (entryID + ',{entryCount++}');
-  //entryID =
+
   entryID.push(entryCount)
-  //allID = document.querySelectorAll("entryID")
+
 
   newItem.id = entryCount.toString();
   list.insertBefore(newItem, list.childNodes[0]);
@@ -107,7 +119,7 @@ function addCity(citySearched){
 
   //lazy workaround
   if ((citySearched.toUpperCase() === "ATLANTA") ){
-    //list.removeChild(list.childNodes[index])
+
     var atl = document.getElementById("1");
     atl.remove();
   }
@@ -120,25 +132,26 @@ function addCity(citySearched){
 
 
 //jquery for first API
-		$.ajax({
-      url: weatherURL,
-      type:"GET",
-      success: function(data){
-        console.log('success',data)
-        weatherData = data
-        updatePanels(weatherData)
-      }
-    })
-
-    $.ajax({
-      url: weatherURLfour,
-      type:"GET",
-      success: function(data){
-        console.log('success',data)
-        weatherDatafour = data
-        updateFour(weatherDatafour)
-      }
-    })
+getCityWeather("Atlanta")
+		// $.ajax({
+    //   url: weatherURL,
+    //   type:"GET",
+    //   success: function(data){
+    //     console.log('success',data)
+    //     weatherData = data
+    //     updatePanels(weatherData)
+    //   }
+    // })
+    //
+    // $.ajax({
+    //   url: weatherURLfour,
+    //   type:"GET",
+    //   success: function(data){
+    //     console.log('success',data)
+    //     weatherDatafour = data
+    //     updateFour(weatherDatafour)
+    //   }
+    // })
 //read the entry in the search box
 //citySearched = document.getElementById("entry").value;
 
@@ -182,6 +195,10 @@ window.addEventListener('keypress', function(e){
 document.getElementById("searchIcon").addEventListener('click', function(){
   //call API function here (update citySearched and weatherURL)
   citySearched = document.getElementById("entry").value;
+  getCityWeather(citySearched)
+})
+
+function getCityWeather(citySearched){
   let weatherURL = ('http://api.openweathermap.org/data/2.5/weather?q='+ citySearched +'&appid=38c15afc59b4cd327299f2d9a2f11807')
   $.ajax({
     url: weatherURL,
@@ -202,39 +219,8 @@ document.getElementById("searchIcon").addEventListener('click', function(){
       updateFour(weatherDatafour)
     }
   })
+}
 
-})
-
-  //for allID( ){}
-  /*
-  for (i = 0; i < entryID.length; i++){
-    let stringID = (entryID[i]).toString();
-    document.getElementById(stringID).addEventListener('click', function(){
-      citySearched = document.getElementById(stringID).innerHTML;
-      let weatherURL = ('http://api.openweathermap.org/data/2.5/weather?q='+ citySearched +'&appid=38c15afc59b4cd327299f2d9a2f11807')
-      $.ajax({
-        url: weatherURL,
-        type:"GET",
-        success: function(data){
-          weatherData = data
-          updatePanels(weatherData)
-          addCity(citySearched)
-        }
-      })
-      let weatherURLfour = ('http://api.openweathermap.org/data/2.5/forecast?q='+ citySearched +'&appid=38c15afc59b4cd327299f2d9a2f11807')
-      $.ajax({
-        url: weatherURLfour,
-        type:"GET",
-        success: function(data){
-          console.log('success',data)
-          weatherDatafour = data
-          updateFour(weatherDatafour)
-        }
-      })
-
-    })
-  }
-  */
   document.getElementById("1").addEventListener('click', function(){
     //call API function here (update citySearched and weatherURL)
     citySearched = document.getElementById("1").innerHTML;
@@ -260,3 +246,4 @@ document.getElementById("searchIcon").addEventListener('click', function(){
     })
 
   })
+
